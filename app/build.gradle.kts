@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
+    id("dagger.hilt.android.plugin")
+    id("androidx.navigation.safeargs")
     kotlin("android")
+    kotlin("kapt")
 }
 
 android {
@@ -27,6 +30,10 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = AppConfig.java
         targetCompatibility = AppConfig.java
@@ -41,10 +48,21 @@ dependencies {
     implementation(Dependencies.appCompat)
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.constraintLayout)
+    implementation(Dependencies.coroutines)
+    implementation(Dependencies.hilt)
+    implementation(Dependencies.lifecycleViewModel)
     implementation(Dependencies.material)
+    implementation(Dependencies.navFragment)
+    implementation(project(":csv-reader"))
+
+    kapt(Dependencies.hiltCompiler)
 
     androidTestImplementation(Dependencies.junitExt)
     androidTestImplementation(Dependencies.espresso)
 
     testImplementation(Dependencies.junit)
+}
+
+kapt {
+    correctErrorTypes = true
 }
