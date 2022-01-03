@@ -1,5 +1,6 @@
 package com.rbrauwers.csv.reader
 
+import com.rbrauwers.csv.reader.domain.model.Category
 import com.rbrauwers.csv.reader.domain.model.Columns
 import com.rbrauwers.csv.reader.domain.model.Product
 import com.rbrauwers.csv.reader.domain.model.Transaction
@@ -29,6 +30,8 @@ class CSVReader(private val inputStream: InputStream) {
         return Transaction(
             date = words[Columns.DATE.index],
             hour = words[Columns.HOUR.index],
+            value = words[Columns.VALUE.index],
+            category = Category.fromRawTransaction(line),
             product = Product.fromRawTransaction(line)
         )
     }

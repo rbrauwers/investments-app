@@ -1,8 +1,8 @@
 package com.rbrauwers.csv.reader.domain.model
 
-enum class Product(private val alternativeNames: List<String> = emptyList()) {
+enum class Product(private val alternativeNames: Set<String> = emptySet()) {
     EFAV,
-    EXCHANGE(listOf("Câmbio")),
+    EXCHANGE(setOf("Câmbio")),
     FNDC,
     IBB,
     SLYV,

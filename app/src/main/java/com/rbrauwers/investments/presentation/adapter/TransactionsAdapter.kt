@@ -30,8 +30,12 @@ internal class TransactionViewHolder(private val binding: VhTransactionBinding) 
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(transaction: Transaction) {
-        binding.dateTextView.text = transaction.date
-        binding.productTextView.text = transaction.product.name
+        with(binding) {
+            categoryTextView.text = transaction.category.name
+            dateTextView.text = transaction.date
+            productTextView.text = transaction.product.name
+            valueTextView.text = transaction.value
+        }
     }
 
 }

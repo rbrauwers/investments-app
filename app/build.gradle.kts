@@ -53,6 +53,7 @@ dependencies {
     implementation(Dependencies.lifecycleViewModel)
     implementation(Dependencies.material)
     implementation(Dependencies.navFragment)
+    implementation(Dependencies.recyclerView)
     implementation(project(":csv-reader"))
 
     kapt(Dependencies.hiltCompiler)

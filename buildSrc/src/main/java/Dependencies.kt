@@ -9,6 +9,7 @@ object Dependencies {
     const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
     const val material = "com.google.android.material:material:${Versions.material}"
     const val navFragment = "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
+    const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
 
     // Test dependencies
     const val junit = "junit:junit:${Versions.junit}"

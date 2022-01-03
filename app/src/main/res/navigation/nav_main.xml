@@ -2,11 +2,27 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_main"
-    app:startDestination="@id/transactionsFragment">
+    app:startDestination="@id/menuFragment">
+
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.rbrauwers.investments.presentation.ui.MenuFragment"
+        android:label="MenuFragment">
+        <action
+            android:id="@+id/action_menuFragment_to_transactionsFragment"
+            app:destination="@id/transactionsFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_groupedTransactionsFragment"
+            app:destination="@id/groupedTransactionsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/transactionsFragment"
         android:name="com.rbrauwers.investments.presentation.ui.TransactionsFragment"
         android:label="TransactionsFragment" />
+    <fragment
+        android:id="@+id/groupedTransactionsFragment"
+        android:name="com.rbrauwers.investments.presentation.ui.GroupedTransactionsFragment"
+        android:label="GroupedTransactionsFragment" />
 
 </navigation>

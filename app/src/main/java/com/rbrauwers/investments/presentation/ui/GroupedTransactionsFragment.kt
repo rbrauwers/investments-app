@@ -1,5 +1,6 @@
 package com.rbrauwers.investments.presentation.ui
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,18 +9,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.rbrauwers.investments.databinding.FragmentTransactionsBinding
-import com.rbrauwers.investments.presentation.adapter.TransactionsAdapter
-import com.rbrauwers.investments.presentation.viewmodel.TransactionsViewModel
+import androidx.recyclerview.widget.RecyclerView
+import com.rbrauwers.investments.databinding.FragmentGroupedTransactionsBinding
+import com.rbrauwers.investments.presentation.adapter.TransactionsGroupsAdapter
+import com.rbrauwers.investments.presentation.viewmodel.TransactionsGroupsViewModel
 import com.rbrauwers.investments.util.fold
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
-internal class TransactionsFragment : Fragment() {
+internal class GroupedTransactionsFragment : Fragment() {
 
-    private var binding: FragmentTransactionsBinding? = null
-    private val viewModel: TransactionsViewModel by viewModels()
+    private var binding: FragmentGroupedTransactionsBinding? = null
+    private val viewModel: TransactionsGroupsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +33,10 @@ internal class TransactionsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return FragmentTransactionsBinding.inflate(inflater, container, false)
-            .apply {
-                binding = this
-                configUI()
-            }.root
+        return FragmentGroupedTransactionsBinding.inflate(inflater, container, false).apply {
+            binding = this
+            configUI()
+        }.root
     }
 
     override fun onDestroyView() {
@@ -47,17 +48,20 @@ internal class TransactionsFragment : Fragment() {
         binding?.apply {
             recyclerView.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            recyclerView.adapter = TransactionsAdapter()
+
+            val adapter = TransactionsGroupsAdapter()
+            recyclerView.addItemDecoration(adapter.decoration)
+            recyclerView.adapter = adapter
         }
     }
 
     private fun collect() {
         lifecycleScope.launchWhenStarted {
-            viewModel.transactionsFlow
+            viewModel.transactionsGroupsFlow
                 .collectLatest { result ->
                     result.fold(
-                        onSuccess = { transactions ->
-                            getAdapter()?.submitList(transactions)
+                        onSuccess = { transactionsGroups ->
+                            getAdapter()?.submit(transactionsGroups)
                         },
                         onFailure = {
                             // TODO
@@ -70,8 +74,7 @@ internal class TransactionsFragment : Fragment() {
         }
     }
 
-    private fun getAdapter(): TransactionsAdapter? {
-        return binding?.recyclerView?.adapter as? TransactionsAdapter
+    private fun getAdapter(): TransactionsGroupsAdapter? {
+        return binding?.recyclerView?.adapter as? TransactionsGroupsAdapter
     }
-
 }
