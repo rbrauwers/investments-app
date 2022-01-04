@@ -11,8 +11,15 @@ internal data class TransactionsGroup(
     private val _transactions = mutableListOf<Transaction>()
     val transactions: List<Transaction> = _transactions
 
+    var total: Double = 0.0
+
     fun addTransaction(transaction: Transaction) {
         _transactions.add(transaction)
+        calcTotal()
+    }
+
+    private fun calcTotal() {
+        total = transactions.sumOf { it.value.toDoubleOrNull() ?: 0.0 }
     }
 
 }

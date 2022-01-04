@@ -49,7 +49,7 @@ internal class GroupedTransactionsFragment : Fragment() {
             recyclerView.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-            val adapter = TransactionsGroupsAdapter()
+            val adapter = TransactionsGroupsAdapter(resources)
             recyclerView.addItemDecoration(adapter.decoration)
             recyclerView.adapter = adapter
         }

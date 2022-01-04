@@ -1,22 +1,29 @@
 package com.rbrauwers.investments.presentation.adapter
 
+import android.content.res.Resources
 import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.rbrauwers.csv.reader.domain.model.Transaction
+import com.rbrauwers.investments.R
+import com.rbrauwers.investments.databinding.VhTotalBinding
 import com.rbrauwers.investments.databinding.VhTransactionBinding
 import com.rbrauwers.investments.databinding.VhTransactionsGroupBinding
 import com.rbrauwers.investments.domain.model.TransactionsGroup
+import com.rbrauwers.investments.util.formatUSD
 
-internal class TransactionsGroupsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+internal class TransactionsGroupsAdapter(resources: Resources) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var expandableTransactionsGroups = emptyList<ExpandableTransactionsGroup>()
     private val flattenList = mutableListOf<Any>()
+    private val evenLineBGColor = ResourcesCompat.getColor(resources, R.color.even_bg, null)
+    private val oddLineBGColor = ResourcesCompat.getColor(resources, R.color.odd_bg, null)
 
     // TODO Should not be placed here
-    val decoration = object: RecyclerView.ItemDecoration() {
+    val decoration = object : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(
             outRect: Rect,
             view: View,
@@ -46,6 +53,15 @@ internal class TransactionsGroupsAdapter : RecyclerView.Adapter<RecyclerView.Vie
                         toggleTransactionsVisibility(bindingAdapterPosition)
                     }
                 }
+            }
+
+            TOTAL -> {
+                val binding = VhTotalBinding.inflate(
+                    LayoutInflater
+                        .from(parent.context), parent, false
+                )
+
+                TotalViewHolder(binding)
             }
 
             TRANSACTION -> {
@@ -80,7 +96,17 @@ internal class TransactionsGroupsAdapter : RecyclerView.Adapter<RecyclerView.Vie
                     return
                 }
 
-                vh.bind(transaction)
+                val color = if (position % 2 == 0) evenLineBGColor else oddLineBGColor
+                vh.bind(transaction, color)
+            }
+
+            is TotalViewHolder -> {
+                val total = flattenList[position] as? TransactionsTotal ?: run {
+                    println("Panic: invalid item")
+                    return
+                }
+
+                vh.bind(total)
             }
         }
     }
@@ -90,24 +116,23 @@ internal class TransactionsGroupsAdapter : RecyclerView.Adapter<RecyclerView.Vie
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(flattenList[position]) {
+        return when (flattenList[position]) {
             is ExpandableTransactionsGroup -> GROUP
             is Transaction -> TRANSACTION
+            is TransactionsTotal -> TOTAL
             else -> throw IllegalArgumentException("Panic: invalid item")
         }
     }
 
     fun submit(transactionsGroups: Set<TransactionsGroup>) {
-        expandableTransactionsGroups = transactionsGroups.map {
-            ExpandableTransactionsGroup(it)
-        }
-
         flattenList.clear()
 
-        expandableTransactionsGroups.forEach {
-            flattenList.add(it)
-            if (it.isExpanded) {
-                flattenList.addAll(it.transactionsGroup.transactions)
+        transactionsGroups.forEach {
+            val expandableGroup = ExpandableTransactionsGroup(it)
+            flattenList.add(expandableGroup)
+
+            if (expandableGroup.isExpanded) {
+                flattenList.addAll(expandableGroup.transactionsGroup.transactions)
             }
         }
 
@@ -126,9 +151,19 @@ internal class TransactionsGroupsAdapter : RecyclerView.Adapter<RecyclerView.Vie
         group.isExpanded = !group.isExpanded
 
         if (group.isExpanded) {
-            flattenList.addAll(position + 1, group.transactionsGroup.transactions)
+            val baseIndex = position + 1
+            val transactionsCount = group.transactionsGroup.transactions.size
+
+            flattenList.addAll(baseIndex, group.transactionsGroup.transactions)
+            flattenList.add(
+                baseIndex + transactionsCount,
+                TransactionsTotal(group.transactionsGroup)
+            )
         } else {
             flattenList.removeAll(group.transactionsGroup.transactions)
+            flattenList.removeIf {
+                (it as? TransactionsTotal)?.transactionsGroup == group.transactionsGroup
+            }
         }
 
         // TODO: use Diff
@@ -137,12 +172,13 @@ internal class TransactionsGroupsAdapter : RecyclerView.Adapter<RecyclerView.Vie
 
     companion object {
         private const val GROUP = 1
-        private const val TRANSACTION = 2
+        private const val TOTAL = 2
+        private const val TRANSACTION = 3
     }
 
 }
 
-internal class TransactionsGroupViewHolder(private val binding: VhTransactionsGroupBinding) :
+private class TransactionsGroupViewHolder(private val binding: VhTransactionsGroupBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(transactionsGroup: TransactionsGroup) {
@@ -152,7 +188,18 @@ internal class TransactionsGroupViewHolder(private val binding: VhTransactionsGr
 
 }
 
-internal data class ExpandableTransactionsGroup(
+private class TotalViewHolder(private val binding: VhTotalBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(total: TransactionsTotal) {
+        binding.valueTextView.text = total.transactionsGroup.total.formatUSD()
+    }
+
+}
+
+private data class ExpandableTransactionsGroup(
     val transactionsGroup: TransactionsGroup,
     var isExpanded: Boolean = false
 )
+
+private data class TransactionsTotal(val transactionsGroup: TransactionsGroup)

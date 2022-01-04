@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="40dp"
     android:paddingStart="16dp"
     android:paddingEnd="16dp">
 
@@ -33,13 +33,19 @@
     <TextView
         android:id="@+id/categoryTextView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/dateTextView"
+        android:autoSizeMaxTextSize="12sp"
+        android:autoSizeMinTextSize="8sp"
+        android:autoSizeTextType="uniform"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/valueTextView"
         app:layout_constraintStart_toEndOf="@+id/productTextView"
-        app:layout_constraintTop_toTopOf="@+id/dateTextView"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Category" />
 
     <TextView

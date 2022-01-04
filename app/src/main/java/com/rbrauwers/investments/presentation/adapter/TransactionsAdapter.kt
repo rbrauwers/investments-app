@@ -21,7 +21,7 @@ internal class TransactionsAdapter :
     }
 
     override fun onBindViewHolder(vh: TransactionViewHolder, position: Int) {
-        vh.bind(getItem(position))
+        vh.bind(getItem(position), null)
     }
 
 }
@@ -29,12 +29,16 @@ internal class TransactionsAdapter :
 internal class TransactionViewHolder(private val binding: VhTransactionBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(transaction: Transaction) {
+    fun bind(transaction: Transaction, bgColor: Int?) {
         with(binding) {
             categoryTextView.text = transaction.category.name
             dateTextView.text = transaction.date
             productTextView.text = transaction.product.name
             valueTextView.text = transaction.value
+
+            bgColor?.apply {
+                itemView.setBackgroundColor(bgColor)
+            }
         }
     }
 
