@@ -11,20 +11,36 @@
         android:paddingEnd="32dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/transactionsButton"
+            android:id="@+id/statementTransactionsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="@string/transactions"
+            android:text="@string/statement_transactions"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/groupedTransactionsButton"
+            android:id="@+id/statementGroupedTransactionsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="@string/grouped_transactions"
-            app:layout_constraintTop_toBottomOf="@+id/transactionsButton" />
+            android:text="@string/statement_grouped_transactions"
+            app:layout_constraintTop_toBottomOf="@+id/statementTransactionsButton" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/exchangeTransactionsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/exchange_transactions"
+            app:layout_constraintTop_toBottomOf="@+id/statementGroupedTransactionsButton" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/exchangeGroupedTransactionsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/exchange_grouped_transactions"
+            app:layout_constraintTop_toBottomOf="@+id/exchangeTransactionsButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

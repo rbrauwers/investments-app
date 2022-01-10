@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Investments</string>
-    <string name="grouped_transactions">Grouped transactions</string>
+    <string name="exchange_grouped_transactions">Grouped transactions [Exchange]</string>
+    <string name="exchange_transactions">Transactions [Exchange]</string>
+    <string name="statement_grouped_transactions">Grouped transactions [Statement]</string>
+    <string name="statement_transactions">Transactions [Statement]</string>
     <string name="total">Total</string>
-    <string name="transactions">Transactions</string>
 </resources>

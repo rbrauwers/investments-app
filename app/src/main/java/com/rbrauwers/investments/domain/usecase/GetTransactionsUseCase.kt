@@ -1,6 +1,7 @@
 package com.rbrauwers.investments.domain.usecase
 
 import com.rbrauwers.csv.reader.domain.model.Transaction
+import com.rbrauwers.investments.domain.model.TransactionsFilter
 import com.rbrauwers.investments.domain.repository.TransactionsRepository
 import com.rbrauwers.investments.util.ExtendedResult
 import com.rbrauwers.investments.util.FlowableUseCase
@@ -12,14 +13,22 @@ internal class GetTransactionsUseCase @Inject constructor(
     private val repository: TransactionsRepository
 ) : FlowableUseCase<GetTransactionsUseCase.Params, List<Transaction>>() {
 
-    class Params
+    data class Params(val filter: TransactionsFilter)
 
     override suspend fun invoke(params: Params): Flow<ExtendedResult<List<Transaction>>> = flow {
         emit(ExtendedResult.Loading)
 
         val result = ExtendedResult.from(
             runCatching {
-                repository.getTransactions()
+                when (params.filter) {
+                    TransactionsFilter.EXCHANGE -> {
+                        repository.getExchangeTransactions()
+                    }
+
+                    TransactionsFilter.STATEMENT -> {
+                        repository.getStatementTransactions()
+                    }
+                }
             }
         )
 

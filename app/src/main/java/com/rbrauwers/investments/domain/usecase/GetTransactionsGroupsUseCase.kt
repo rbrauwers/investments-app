@@ -19,7 +19,7 @@ internal class GetTransactionsGroupsUseCase @Inject constructor(
 
         val result = ExtendedResult.from(
             runCatching {
-                repository.getTransactionsGroups()
+                repository.getStatementTransactionsGroups()
             }
         )
 

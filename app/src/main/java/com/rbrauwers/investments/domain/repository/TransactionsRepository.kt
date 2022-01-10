@@ -6,8 +6,12 @@ import java.io.InputStream
 
 internal interface TransactionsRepository {
 
-    suspend fun getTransactions(): List<Transaction>
+    suspend fun getStatementTransactions(): List<Transaction>
 
-    suspend fun getTransactionsGroups(): Set<TransactionsGroup>
+    suspend fun getStatementTransactionsGroups(): Set<TransactionsGroup>
+
+    suspend fun getExchangeTransactions(): List<Transaction>
+
+    suspend fun getExchangeTransactionsGroups(): Set<TransactionsGroup>
 
 }

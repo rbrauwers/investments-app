@@ -2,7 +2,7 @@ package com.rbrauwers.csv.reader.domain.model
 
 enum class Product(private val alternativeNames: Set<String> = emptySet()) {
     EFAV,
-    EXCHANGE(setOf("Câmbio")),
+    EXCHANGE(setOf("Câmbio", "Remessa", "Ted recebido")),
     FNDC,
     IBB,
     SLYV,
@@ -19,7 +19,7 @@ enum class Product(private val alternativeNames: Set<String> = emptySet()) {
                 }
 
                 if (product.alternativeNames.any { alternativeName ->
-                        raw.contains(alternativeName)
+                        raw.contains(alternativeName, ignoreCase = true)
                     }) {
                     return product
                 }

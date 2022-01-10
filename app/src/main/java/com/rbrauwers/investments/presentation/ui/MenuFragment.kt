@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.rbrauwers.investments.databinding.FragmentMenuBinding
+import com.rbrauwers.investments.domain.model.TransactionsFilter
 
 internal class MenuFragment : Fragment() {
 
@@ -30,14 +31,31 @@ internal class MenuFragment : Fragment() {
 
     private fun configUI() {
         binding?.apply {
-            transactionsButton.setOnClickListener {
+            statementTransactionsButton.setOnClickListener {
                 findNavController()
-                    .navigate(MenuFragmentDirections.actionMenuFragmentToTransactionsFragment())
+                    .navigate(
+                        MenuFragmentDirections.actionMenuFragmentToTransactionsFragment(
+                            TransactionsFilter.STATEMENT
+                        )
+                    )
             }
 
-            groupedTransactionsButton.setOnClickListener {
+            statementGroupedTransactionsButton.setOnClickListener {
                 findNavController()
                     .navigate(MenuFragmentDirections.actionMenuFragmentToGroupedTransactionsFragment())
+            }
+
+            exchangeTransactionsButton.setOnClickListener {
+                findNavController()
+                    .navigate(
+                        MenuFragmentDirections.actionMenuFragmentToTransactionsFragment(
+                            TransactionsFilter.EXCHANGE
+                        )
+                    )
+            }
+
+            exchangeGroupedTransactionsButton.setOnClickListener {
+                // TODO
             }
         }
     }

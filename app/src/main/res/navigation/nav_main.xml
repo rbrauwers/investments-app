@@ -19,7 +19,11 @@
     <fragment
         android:id="@+id/transactionsFragment"
         android:name="com.rbrauwers.investments.presentation.ui.TransactionsFragment"
-        android:label="TransactionsFragment" />
+        android:label="TransactionsFragment" >
+        <argument
+            android:name="filter"
+            app:argType="com.rbrauwers.investments.domain.model.TransactionsFilter" />
+    </fragment>
     <fragment
         android:id="@+id/groupedTransactionsFragment"
         android:name="com.rbrauwers.investments.presentation.ui.GroupedTransactionsFragment"

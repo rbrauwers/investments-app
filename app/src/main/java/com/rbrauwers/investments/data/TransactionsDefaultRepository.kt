@@ -1,52 +1,82 @@
 package com.rbrauwers.investments.data
 
-import com.rbrauwers.csv.reader.CSVReader
+import com.rbrauwers.csv.reader.domain.reader.CSVReader
 import com.rbrauwers.csv.reader.domain.model.Transaction
+import com.rbrauwers.investments.di.ExchangeReader
+import com.rbrauwers.investments.di.StatementReader
 import com.rbrauwers.investments.domain.model.TransactionsGroup
 import com.rbrauwers.investments.domain.repository.TransactionsRepository
 import javax.inject.Inject
 
-internal class TransactionsDefaultRepository @Inject constructor(private val reader: CSVReader) :
-    TransactionsRepository {
+internal class TransactionsDefaultRepository @Inject constructor(
+    @StatementReader private val statementReader: CSVReader,
+    @ExchangeReader private val exchangeReader: CSVReader
+) : TransactionsRepository {
 
-    private var transactions: List<Transaction>? = null
-    private var transactionsGroups: Set<TransactionsGroup>? = null
+    private var statementTransactions: List<Transaction>? = null
+    private var statementTransactionsGroups: Set<TransactionsGroup>? = null
+    private var exchangeTransactions: List<Transaction>? = null
+    private var exchangeTransactionsGroups: Set<TransactionsGroup>? = null
 
-    override suspend fun getTransactions(): List<Transaction> {
-        if (transactions == null) {
-            transactions = reader
-                .parse(CSVReader.ReadOptions(skipFirstLine = true))
+    override suspend fun getStatementTransactions(): List<Transaction> {
+        if (statementTransactions == null) {
+            statementTransactions = parseTransactions(statementReader)
         }
 
-        return transactions.orEmpty()
+        return statementTransactions.orEmpty()
     }
 
-    override suspend fun getTransactionsGroups(): Set<TransactionsGroup> {
-        if (transactionsGroups == null) {
-            val transactions = getTransactions()
-            val transactionsGroups = mutableSetOf<TransactionsGroup>()
-
-            transactions.forEach { transaction ->
-                if (!transaction.category.isAggregator) {
-                    return@forEach
-                }
-
-                val group = transactionsGroups.firstOrNull {
-                    it.date == transaction.date &&
-                    it.product == transaction.product
-                } ?: TransactionsGroup(
-                    date = transaction.date,
-                    product = transaction.product
-                )
-
-                group.addTransaction(transaction)
-                transactionsGroups.add(group)
-            }
-
-            this.transactionsGroups = transactionsGroups
+    override suspend fun getStatementTransactionsGroups(): Set<TransactionsGroup> {
+        if (statementTransactionsGroups == null) {
+            val transactions = getStatementTransactions()
+            statementTransactionsGroups = parseTransactionsGroups(transactions)
         }
 
-        return transactionsGroups.orEmpty()
+        return statementTransactionsGroups.orEmpty()
+    }
+
+    override suspend fun getExchangeTransactions(): List<Transaction> {
+        if (exchangeTransactions == null) {
+            exchangeTransactions = parseTransactions(exchangeReader)
+        }
+
+        return exchangeTransactions.orEmpty()
+    }
+
+    override suspend fun getExchangeTransactionsGroups(): Set<TransactionsGroup> {
+        if (exchangeTransactionsGroups == null) {
+            val transactions = getExchangeTransactions()
+            exchangeTransactionsGroups = parseTransactionsGroups(transactions)
+        }
+
+        return exchangeTransactionsGroups.orEmpty()
+    }
+
+    private fun parseTransactions(reader: CSVReader): List<Transaction> {
+        return reader.parse(CSVReader.ReadOptions(skipFirstLine = true))
+    }
+
+    private fun parseTransactionsGroups(transactions: List<Transaction>): Set<TransactionsGroup> {
+        val transactionsGroups = mutableSetOf<TransactionsGroup>()
+
+        transactions.forEach { transaction ->
+            if (!transaction.category.isAggregator) {
+                return@forEach
+            }
+
+            val group = transactionsGroups.firstOrNull {
+                it.date == transaction.date &&
+                        it.product == transaction.product
+            } ?: TransactionsGroup(
+                date = transaction.date,
+                product = transaction.product
+            )
+
+            group.addTransaction(transaction)
+            transactionsGroups.add(group)
+        }
+
+        return transactionsGroups
     }
 
 }

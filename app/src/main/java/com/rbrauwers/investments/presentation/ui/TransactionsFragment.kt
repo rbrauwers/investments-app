@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rbrauwers.investments.databinding.FragmentTransactionsBinding
 import com.rbrauwers.investments.presentation.adapter.TransactionsAdapter
@@ -20,9 +21,11 @@ internal class TransactionsFragment : Fragment() {
 
     private var binding: FragmentTransactionsBinding? = null
     private val viewModel: TransactionsViewModel by viewModels()
+    private val args: TransactionsFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.getTransactions(args.filter)
         collect()
     }
 

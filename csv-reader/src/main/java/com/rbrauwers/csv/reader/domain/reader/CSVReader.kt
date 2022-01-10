@@ -1,8 +1,5 @@
-package com.rbrauwers.csv.reader
+package com.rbrauwers.csv.reader.domain.reader
 
-import com.rbrauwers.csv.reader.domain.model.Category
-import com.rbrauwers.csv.reader.domain.model.Columns
-import com.rbrauwers.csv.reader.domain.model.Product
 import com.rbrauwers.csv.reader.domain.model.Transaction
 import java.io.BufferedReader
 import java.io.InputStream
@@ -17,7 +14,7 @@ class CSVReader(private val inputStream: InputStream) {
         reader.useLines { lines ->
             lines.forEachIndexed { index, line ->
                 if (!options.skipFirstLine || index != 0) {
-                    transactions.add(parseLine(line))
+                    transactions.add(Transaction.fromRawLine(line.replace("\"", "")))
                 }
             }
         }
@@ -25,21 +22,10 @@ class CSVReader(private val inputStream: InputStream) {
         return transactions
     }
 
-    private fun parseLine(line: String): Transaction {
-        val words = line.split(SEPARATOR)
-        return Transaction(
-            date = words[Columns.DATE.index],
-            hour = words[Columns.HOUR.index],
-            value = words[Columns.VALUE.index],
-            category = Category.fromRawTransaction(line),
-            product = Product.fromRawTransaction(line)
-        )
-    }
-
     data class ReadOptions(val skipFirstLine: Boolean)
 
     companion object {
-        private const val SEPARATOR = ","
+        internal const val SEPARATOR = ","
     }
 
 }

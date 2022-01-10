@@ -7,7 +7,9 @@ enum class Category(
 
     BROKERAGE(isAggregator = true),
     BUY(alternativeNames = setOf("Compra"), isAggregator = true),
-    EXCHANGE(setOf("Câmbio"), isAggregator = false),
+    DEPOSIT(alternativeNames = setOf("Ted recebido"), isAggregator = false),
+    EXCHANGE(setOf("Câmbio", "Remessa"), isAggregator = false),
+    EXCHANGE_TAX(setOf("IOF"), isAggregator = true),
     DIVIDEND(isAggregator = false),
     DIVIDEND_TAX(setOf("Dividend tax"), isAggregator = false),
     SELL(setOf("Venda"), isAggregator = true),
@@ -21,13 +23,13 @@ enum class Category(
                 }
 
                 if (category.alternativeNames.any { alternativeName ->
-                        raw.contains(alternativeName)
+                        raw.contains(alternativeName, ignoreCase = true)
                     }) {
                     return category
                 }
             }
 
-            return Category.UNKNOWN
+            return UNKNOWN
         }
     }
 

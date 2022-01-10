@@ -3,6 +3,7 @@ package com.rbrauwers.investments.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rbrauwers.csv.reader.domain.model.Transaction
+import com.rbrauwers.investments.domain.model.TransactionsFilter
 import com.rbrauwers.investments.domain.usecase.GetTransactionsUseCase
 import com.rbrauwers.investments.util.ExtendedResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,14 +24,10 @@ internal class TransactionsViewModel @Inject constructor(
         MutableStateFlow<ExtendedResult<List<Transaction>>>(ExtendedResult.Loading)
     val transactionsFlow: StateFlow<ExtendedResult<List<Transaction>>> = _transactionsFlow
 
-    init {
-        getTransactions()
-    }
-
-    private fun getTransactions() {
+    fun getTransactions(filter: TransactionsFilter) {
         // TODO: dispatcher should a property
         viewModelScope.launch(Dispatchers.IO) {
-            getTransactionsUseCase(GetTransactionsUseCase.Params()).onEach {
+            getTransactionsUseCase(GetTransactionsUseCase.Params(filter)).onEach {
                 _transactionsFlow.value = it
             }.launchIn(this)
         }
