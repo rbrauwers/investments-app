@@ -14,4 +14,6 @@ internal interface TransactionsRepository {
 
     suspend fun getExchangeTransactionsGroups(): Set<TransactionsGroup>
 
+    suspend fun getForexTransactions(): List<Transaction>
+
 }

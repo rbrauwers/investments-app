@@ -2,6 +2,8 @@ package com.rbrauwers.investments.di
 
 import android.content.Context
 import com.rbrauwers.csv.reader.domain.reader.CSVReader
+import com.rbrauwers.csv.reader.domain.reader.BankingReader
+import com.rbrauwers.csv.reader.domain.reader.ForexReader
 import com.rbrauwers.investments.R
 import com.rbrauwers.investments.data.TransactionsDefaultRepository
 import com.rbrauwers.investments.domain.repository.TransactionsRepository
@@ -20,6 +22,7 @@ internal abstract class TransactionsModule {
 
     @Singleton
     @Binds
+    @Suppress("unused")
     abstract fun bindTransactionsRepository(
         repository: TransactionsDefaultRepository
     ): TransactionsRepository
@@ -33,13 +36,18 @@ internal object CSVReaderModule {
     @StatementReader
     @Provides
     fun provideStatementReader(@ApplicationContext context: Context): CSVReader {
-        return CSVReader(context.resources.openRawResource(R.raw.statement))
+        return BankingReader(context.resources.openRawResource(R.raw.statement))
     }
 
     @ExchangeReader
     @Provides
     fun provideExchangeReader(@ApplicationContext context: Context): CSVReader {
-        return CSVReader(context.resources.openRawResource(R.raw.banking))
+        return BankingReader(context.resources.openRawResource(R.raw.banking))
+    }
+
+    @Provides
+    fun provideForexReader(@ApplicationContext context: Context): CSVReader {
+        return ForexReader(context.resources.openRawResource(R.raw.report_forex))
     }
 
 }

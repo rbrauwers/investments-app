@@ -19,7 +19,7 @@ internal data class TransactionsGroup(
     }
 
     private fun calcTotal() {
-        total = transactions.sumOf { it.value.toDoubleOrNull() ?: 0.0 }
+        total = transactions.sumOf { it.valueUsd.toDoubleOrNull() ?: 0.0 }
     }
 
 }

@@ -1,7 +1,7 @@
 package com.rbrauwers.investments.data
 
-import com.rbrauwers.csv.reader.domain.reader.CSVReader
 import com.rbrauwers.csv.reader.domain.model.Transaction
+import com.rbrauwers.csv.reader.domain.reader.CSVReader
 import com.rbrauwers.investments.di.ExchangeReader
 import com.rbrauwers.investments.di.StatementReader
 import com.rbrauwers.investments.domain.model.TransactionsGroup
@@ -10,13 +10,15 @@ import javax.inject.Inject
 
 internal class TransactionsDefaultRepository @Inject constructor(
     @StatementReader private val statementReader: CSVReader,
-    @ExchangeReader private val exchangeReader: CSVReader
+    @ExchangeReader private val exchangeReader: CSVReader,
+    private val forexReader: CSVReader
 ) : TransactionsRepository {
 
     private var statementTransactions: List<Transaction>? = null
     private var statementTransactionsGroups: Set<TransactionsGroup>? = null
     private var exchangeTransactions: List<Transaction>? = null
     private var exchangeTransactionsGroups: Set<TransactionsGroup>? = null
+    private var forexTransactions: List<Transaction>? = null
 
     override suspend fun getStatementTransactions(): List<Transaction> {
         if (statementTransactions == null) {
@@ -52,6 +54,14 @@ internal class TransactionsDefaultRepository @Inject constructor(
         return exchangeTransactionsGroups.orEmpty()
     }
 
+    override suspend fun getForexTransactions(): List<Transaction> {
+        if (forexTransactions == null) {
+            forexTransactions = parseTransactions(forexReader)
+        }
+
+        return forexTransactions.orEmpty()
+    }
+
     private fun parseTransactions(reader: CSVReader): List<Transaction> {
         return reader.parse(CSVReader.ReadOptions(skipFirstLine = true))
     }
@@ -66,7 +76,7 @@ internal class TransactionsDefaultRepository @Inject constructor(
 
             val group = transactionsGroups.firstOrNull {
                 it.date == transaction.date &&
-                        it.product == transaction.product
+                    it.product == transaction.product
             } ?: TransactionsGroup(
                 date = transaction.date,
                 product = transaction.product

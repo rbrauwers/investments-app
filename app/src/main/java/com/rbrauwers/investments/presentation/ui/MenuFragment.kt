@@ -32,32 +32,27 @@ internal class MenuFragment : Fragment() {
     private fun configUI() {
         binding?.apply {
             statementTransactionsButton.setOnClickListener {
-                findNavController()
-                    .navigate(
-                        MenuFragmentDirections.actionMenuFragmentToTransactionsFragment(
-                            TransactionsFilter.STATEMENT
-                        )
-                    )
+                navToTransactions(TransactionsFilter.STATEMENT)
+            }
+
+            exchangeTransactionsButton.setOnClickListener {
+                navToTransactions(TransactionsFilter.EXCHANGE)
+            }
+
+            forexTransactionsButton.setOnClickListener {
+                navToTransactions(TransactionsFilter.FOREX)
             }
 
             statementGroupedTransactionsButton.setOnClickListener {
                 findNavController()
                     .navigate(MenuFragmentDirections.actionMenuFragmentToGroupedTransactionsFragment())
             }
-
-            exchangeTransactionsButton.setOnClickListener {
-                findNavController()
-                    .navigate(
-                        MenuFragmentDirections.actionMenuFragmentToTransactionsFragment(
-                            TransactionsFilter.EXCHANGE
-                        )
-                    )
-            }
-
-            exchangeGroupedTransactionsButton.setOnClickListener {
-                // TODO
-            }
         }
+    }
+
+    private fun navToTransactions(filter: TransactionsFilter) {
+        findNavController()
+            .navigate(MenuFragmentDirections.actionMenuFragmentToTransactionsFragment(filter))
     }
 
 }

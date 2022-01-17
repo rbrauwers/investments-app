@@ -19,28 +19,28 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/statementGroupedTransactionsButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/statement_grouped_transactions"
-            app:layout_constraintTop_toBottomOf="@+id/statementTransactionsButton" />
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/exchangeTransactionsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@string/exchange_transactions"
-            app:layout_constraintTop_toBottomOf="@+id/statementGroupedTransactionsButton" />
+            app:layout_constraintTop_toBottomOf="@+id/statementTransactionsButton" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/exchangeGroupedTransactionsButton"
+            android:id="@+id/forexTransactionsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="@string/exchange_grouped_transactions"
+            android:text="@string/forex_transactions"
             app:layout_constraintTop_toBottomOf="@+id/exchangeTransactionsButton" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/statementGroupedTransactionsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/statement_grouped_transactions"
+            app:layout_constraintTop_toBottomOf="@+id/forexTransactionsButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -2,6 +2,7 @@
     <string name="app_name">Investments</string>
     <string name="exchange_grouped_transactions">Grouped transactions [Exchange]</string>
     <string name="exchange_transactions">Transactions [Exchange]</string>
+    <string name="forex_transactions">Transactions [Forex]</string>
     <string name="statement_grouped_transactions">Grouped transactions [Statement]</string>
     <string name="statement_transactions">Transactions [Statement]</string>
     <string name="total">Total</string>

@@ -34,7 +34,7 @@ internal class TransactionViewHolder(private val binding: VhTransactionBinding) 
             categoryTextView.text = transaction.category.name
             dateTextView.text = transaction.date
             productTextView.text = transaction.product.name
-            valueTextView.text = transaction.value
+            valueTextView.text = transaction.valueUsd
 
             bgColor?.apply {
                 itemView.setBackgroundColor(bgColor)

@@ -25,6 +25,10 @@ internal class GetTransactionsUseCase @Inject constructor(
                         repository.getExchangeTransactions()
                     }
 
+                    TransactionsFilter.FOREX -> {
+                        repository.getForexTransactions()
+                    }
+
                     TransactionsFilter.STATEMENT -> {
                         repository.getStatementTransactions()
                     }

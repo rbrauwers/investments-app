@@ -5,16 +5,20 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
-class CSVReader(private val inputStream: InputStream) {
+interface CSVReader {
+
+    fun getInputStream(): InputStream
+
+    fun parseLine(line: String): Transaction
 
     fun parse(options: ReadOptions): List<Transaction> {
-        val reader = BufferedReader(InputStreamReader(inputStream))
+        val reader = BufferedReader(InputStreamReader(getInputStream()))
         val transactions = mutableListOf<Transaction>()
 
         reader.useLines { lines ->
             lines.forEachIndexed { index, line ->
                 if (!options.skipFirstLine || index != 0) {
-                    transactions.add(Transaction.fromRawLine(line.replace("\"", "")))
+                    transactions.add(parseLine(line))
                 }
             }
         }
