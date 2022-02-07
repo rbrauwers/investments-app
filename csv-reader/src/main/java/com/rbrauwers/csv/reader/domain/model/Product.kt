@@ -2,7 +2,7 @@ package com.rbrauwers.csv.reader.domain.model
 
 enum class Product(private val alternativeNames: Set<String> = emptySet()) {
     EFAV,
-    EXCHANGE(setOf("Câmbio", "Remessa", "Ted recebido")),
+    FOREX(setOf("Câmbio", "Remessa", "Ted recebido")),
     FNDC,
     IBB,
     SLYV,

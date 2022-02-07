@@ -14,13 +14,17 @@ class BankingReader(private val inputStream: InputStream): CSVReader {
 
     override fun parseLine(line: String): Transaction {
         val words = line.splitCSVLine(CSVReader.SEPARATOR)
+        val rawDate = "${words[Columns.DATE.index]}-${words[Columns.HOUR.index]}"
+
         return Transaction(
-            date = words[Columns.DATE.index],
-            hour = words[Columns.HOUR.index],
+            rawDate = rawDate,
             valueBrl = null,
-            valueUsd = words[Columns.VALUE_USD.index],
+            valueUsd = CSVReader.parseDouble(words[Columns.VALUE_USD.index]),
             category = Category.fromRawTransaction(line),
-            product = Product.fromRawTransaction(line)
+            product = Product.fromRawTransaction(line),
+            tax = null,
+            exchangeRate = null,
+            inputDateFormat = "MM/dd/yyyy-hh:mm"
         )
     }
 

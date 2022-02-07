@@ -31,10 +31,10 @@ internal class TransactionViewHolder(private val binding: VhTransactionBinding) 
 
     fun bind(transaction: Transaction, bgColor: Int?) {
         with(binding) {
-            categoryTextView.text = transaction.category.name
-            dateTextView.text = transaction.date
+            dateTextView.text = transaction.formatDate()
             productTextView.text = transaction.product.name
-            valueTextView.text = transaction.valueUsd
+            categoryTextView.text = transaction.category.name
+            valueTextView.text = transaction.getFormattedValue()
 
             bgColor?.apply {
                 itemView.setBackgroundColor(bgColor)

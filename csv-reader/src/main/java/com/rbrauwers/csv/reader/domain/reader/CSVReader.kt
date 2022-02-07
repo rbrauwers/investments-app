@@ -30,6 +30,27 @@ interface CSVReader {
 
     companion object {
         internal const val SEPARATOR = ","
+
+        internal fun parseDouble(raw: String): Double? {
+            val sb = StringBuilder(raw.replace("\"", "").trim())
+
+            sb.filter {
+                it.isDigit() || (it == ',') || (it == '-') || (it == '.')
+            }
+
+            val decimalSeparatorIndex = maxOf(sb.lastIndexOf('.'), sb.lastIndexOf(','))
+            if (decimalSeparatorIndex != -1) {
+                sb[decimalSeparatorIndex] = '.'
+            }
+
+            sb.forEachIndexed { index, c ->
+                if (index < decimalSeparatorIndex && (c == '.' || c == ',')) {
+                    sb.deleteCharAt(index)
+                }
+            }
+
+            return sb.toString().toDoubleOrNull()
+        }
     }
 
 }

@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.rbrauwers.csv.reader.domain.model.Transaction
+import com.rbrauwers.csv.reader.domain.utils.Formatter
 import com.rbrauwers.investments.R
 import com.rbrauwers.investments.databinding.VhTotalBinding
 import com.rbrauwers.investments.databinding.VhTransactionBinding
 import com.rbrauwers.investments.databinding.VhTransactionsGroupBinding
 import com.rbrauwers.investments.domain.model.TransactionsGroup
-import com.rbrauwers.investments.util.formatUSD
 
 internal class TransactionsGroupsAdapter(resources: Resources) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -133,6 +133,7 @@ internal class TransactionsGroupsAdapter(resources: Resources) :
 
             if (expandableGroup.isExpanded) {
                 flattenList.addAll(expandableGroup.transactionsGroup.transactions)
+                flattenList.add(TransactionsTotal(expandableGroup.transactionsGroup))
             }
         }
 
@@ -182,7 +183,7 @@ private class TransactionsGroupViewHolder(private val binding: VhTransactionsGro
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(transactionsGroup: TransactionsGroup) {
-        binding.dateTextView.text = transactionsGroup.date
+        binding.dateTextView.text = transactionsGroup.formatDate()
         binding.productTextView.text = transactionsGroup.product.name
     }
 
@@ -192,14 +193,14 @@ private class TotalViewHolder(private val binding: VhTotalBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(total: TransactionsTotal) {
-        binding.valueTextView.text = total.transactionsGroup.total.formatUSD()
+        binding.valueTextView.text = Formatter.formatUSD(total.transactionsGroup.totalInUsd)
     }
 
 }
 
 private data class ExpandableTransactionsGroup(
     val transactionsGroup: TransactionsGroup,
-    var isExpanded: Boolean = false
+    var isExpanded: Boolean = true
 )
 
 private data class TransactionsTotal(val transactionsGroup: TransactionsGroup)
