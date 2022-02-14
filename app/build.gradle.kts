@@ -55,6 +55,7 @@ dependencies {
     implementation(Dependencies.navFragment)
     implementation(Dependencies.recyclerView)
     implementation(project(":csv-reader"))
+    implementation(project(":exchange-service"))
 
     kapt(Dependencies.hiltCompiler)
 

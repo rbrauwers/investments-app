@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.rbrauwers.investments.databinding.FragmentMenuBinding
 import com.rbrauwers.investments.domain.model.TransactionsFilter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 internal class MenuFragment : Fragment() {
 
     private var binding: FragmentMenuBinding? = null

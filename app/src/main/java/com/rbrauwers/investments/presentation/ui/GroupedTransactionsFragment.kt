@@ -1,6 +1,5 @@
 package com.rbrauwers.investments.presentation.ui
 
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.rbrauwers.investments.databinding.FragmentGroupedTransactionsBinding
 import com.rbrauwers.investments.presentation.adapter.TransactionsGroupsAdapter
 import com.rbrauwers.investments.presentation.viewmodel.TransactionsGroupsViewModel

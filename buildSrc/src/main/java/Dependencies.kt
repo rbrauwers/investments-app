@@ -9,7 +9,11 @@ object Dependencies {
     const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
     const val material = "com.google.android.material:material:${Versions.material}"
     const val navFragment = "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
+    const val okHttp = "com.squareup.okhttp3:okhttp:${Versions.okHttp}"
+    const val okHttpLogging = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
+    const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
+    const val retrofitMoshi = "com.squareup.retrofit2:converter-moshi:${Versions.retrofit}"
 
     // Test dependencies
     const val junit = "junit:junit:${Versions.junit}"

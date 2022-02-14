@@ -17,17 +17,6 @@ class ForexReader(private val inputStream: InputStream) : CSVReader {
         val words = line.splitCSVLine(CSVReader.SEPARATOR)
         val rawDate = "${words[Columns.DATE.index]}-${words[Columns.HOUR.index]}"
 
-        /*
-        println("qqq valueBrl: ${words[Columns.VALUE_BRL.index]}")
-        println("qqq valueBrl: ${CSVReader.parseDouble(words[Columns.VALUE_BRL.index])}")
-        println("qqq valueUsd: ${words[Columns.VALUE_USD.index]}")
-        println("qqq valueUsd: ${CSVReader.parseDouble(words[Columns.VALUE_USD.index])}")
-        println("qqq tax: ${words[Columns.TAX.index]}")
-        println("qqq tax: ${CSVReader.parseDouble(words[Columns.TAX.index])}")
-        println("qqq [1] exchange rate fom ForexReader: ${words[Columns.EXCHANGE_RATE.index]}")
-        println("qqq [2] exchange rate fom ForexReader: ${CSVReader.parseDouble(words[Columns.EXCHANGE_RATE.index])}")
-        */
-
         return Transaction(
             rawDate = rawDate,
             valueBrl = CSVReader.parseDouble(words[Columns.VALUE_BRL.index]),

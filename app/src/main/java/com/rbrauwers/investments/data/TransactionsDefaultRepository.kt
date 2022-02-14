@@ -1,11 +1,13 @@
 package com.rbrauwers.investments.data
 
+import com.rbrauwers.csv.reader.di.ExchangeReader
+import com.rbrauwers.csv.reader.di.StatementReader
 import com.rbrauwers.csv.reader.domain.model.Category
 import com.rbrauwers.csv.reader.domain.model.Product
 import com.rbrauwers.csv.reader.domain.model.Transaction
 import com.rbrauwers.csv.reader.domain.reader.CSVReader
-import com.rbrauwers.investments.di.ExchangeReader
-import com.rbrauwers.investments.di.StatementReader
+import com.rbrauwers.exchange.service.domain.model.ExchangeRate
+import com.rbrauwers.exchange.service.domain.repository.HistoricalExchangeRepository
 import com.rbrauwers.investments.domain.model.TransactionsGroup
 import com.rbrauwers.investments.domain.repository.TransactionsRepository
 import java.util.*
@@ -14,7 +16,8 @@ import javax.inject.Inject
 internal class TransactionsDefaultRepository @Inject constructor(
     @StatementReader private val statementReader: CSVReader,
     @ExchangeReader private val exchangeReader: CSVReader,
-    private val forexReader: CSVReader
+    private val forexReader: CSVReader,
+    private val historicalExchangeRepository: HistoricalExchangeRepository
 ) : TransactionsRepository {
 
     private var statementTransactions: List<Transaction>? = null
@@ -73,6 +76,10 @@ internal class TransactionsDefaultRepository @Inject constructor(
         return filterForexTransactions(untilDate).sumOf { it.valueUsd ?: 0.0 }
     }
 
+    override suspend fun getHistoricalExchangeRate(date: String): ExchangeRate? {
+        return historicalExchangeRepository.getHistoricalExchange(date)
+    }
+
     private fun parseTransactions(reader: CSVReader): List<Transaction> {
         return reader.parse(CSVReader.ReadOptions(skipFirstLine = true))
     }
@@ -120,7 +127,6 @@ internal class TransactionsDefaultRepository @Inject constructor(
         date: Date?,
         useFirstForexAsPlaceholder: Boolean
     ): Transaction? {
-        println("qqq getClosestForexTransaction date: ${date}")
         date ?: return null
 
         // Relaxes forex date by 10 days
@@ -162,14 +168,6 @@ internal class TransactionsDefaultRepository @Inject constructor(
             val relativeValue = (buyValue / totalOfForexValues) * totalOfForexTaxes
             sumOfRelativeValues += relativeValue
 
-            /*
-            println("qqq date: ${group.getDate()}")
-            println("qqq buyValue: $buyValue")
-            println("qqq totalOfForexTaxes: $totalOfForexTaxes")
-            println("qqq totalOfForexValues: $totalOfForexValues")
-            println("qqq relativeValue: $relativeValue")
-            */
-
             group.addTransaction(
                 Transaction(
                     category = Category.FOREX_TAX,
@@ -195,8 +193,6 @@ internal class TransactionsDefaultRepository @Inject constructor(
                 date = group.getDate(),
                 useFirstForexAsPlaceholder = index == 0
             )?.exchangeRate
-
-            println("qqq exchangeRate: $exchangeRate")
 
             group.addTransaction(
                 Transaction(

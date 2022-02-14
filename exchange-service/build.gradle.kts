@@ -1,3 +1,6 @@
+import configs.builder.getExchangeRatesApiKey
+import configs.builder.testingDebug
+
 plugins {
     id("com.android.library")
     id("dagger.hilt.android.plugin")
@@ -13,14 +16,19 @@ android {
         minSdk = AppConfig.minSdk
         targetSdk = AppConfig.targetSdk
         testInstrumentationRunner = AppConfig.testInstrumentationRunner
+
+        buildConfigField(
+            "String",
+            "EXCHANGE_RATES_API_KEY",
+            getExchangeRatesApiKey(rootProject.file(projectDir.path + "/configs.properties")))
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
@@ -33,6 +41,8 @@ android {
     kotlinOptions {
         jvmTarget = "${AppConfig.java}"
     }
+
+    testingDebug(projectDir.path + "/configs.properties")
 }
 
 hilt {
@@ -42,6 +52,11 @@ hilt {
 dependencies {
     implementation(Dependencies.hilt)
     kapt(Dependencies.hiltCompiler)
+
+    implementation(Dependencies.okHttp)
+    implementation(Dependencies.okHttpLogging)
+    implementation(Dependencies.retrofit)
+    implementation(Dependencies.retrofitMoshi)
 
     androidTestImplementation(Dependencies.junitExt)
     androidTestImplementation(Dependencies.espresso)
