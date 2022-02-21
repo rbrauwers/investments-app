@@ -6,6 +6,7 @@ object Versions {
     const val constraintLayout = "2.1.2"
     const val coreKtx = "1.7.0"
     const val coroutines = "1.6.0"
+    const val dataStore = "1.0.0"
     const val lifecycle = "2.4.0"
     const val hilt = "2.38.1"
     const val material = "1.4.0"

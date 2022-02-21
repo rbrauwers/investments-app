@@ -50,6 +50,8 @@ hilt {
 }
 
 dependencies {
+    implementation(Dependencies.dataStorePreferences)
+
     implementation(Dependencies.hilt)
     kapt(Dependencies.hiltCompiler)
 

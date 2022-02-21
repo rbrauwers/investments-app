@@ -4,6 +4,7 @@ object Dependencies {
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appcompat}"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+    const val dataStorePreferences = "androidx.datastore:datastore-preferences:${Versions.dataStore}"
     const val hilt = "com.google.dagger:hilt-android:${Versions.hilt}"
     const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
     const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
